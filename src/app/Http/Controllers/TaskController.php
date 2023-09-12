@@ -21,7 +21,12 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        // createは正常の場合はデータを返す
+        $task = Task::create($request->all());
+        
+        return $task
+            ? response()->json($task, 201)
+            : response()->json($task, 500);
     }
 
     /**
@@ -37,14 +42,21 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        // createは正常の場合はデータを返す
+        $task->title = $request->title;
+        
+        return $task->update()
+            ? response()->json($task)// 成功時のステータスはデフォルトは200
+            : response()->json($task, 500);
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
-    {
-        //
+    {   
+        return $task->delete()
+            ? response()->json($task)
+            : response()->json($task, 500);
     }
 }
