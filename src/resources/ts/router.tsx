@@ -5,6 +5,9 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import TaskPage from './pages/tasks';
+import LoginPage from './pages/login';
+import HelpPage from './pages/help';
 
 const Router = () => {
   return (
@@ -13,22 +16,22 @@ const Router = () => {
         <nav>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/">ホーム</Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
+              <Link to="/help">ヘルプ</Link>
             </li>
             <li>
-              <Link to="/users">Users</Link>
+              <Link to="/login">ログイン</Link>
             </li>
           </ul>
         </nav>
 
         <Routes>
           // v6からelementを用いた書き方に変更
-          <Route path='/about' element={<h2>About</h2>} />
-          <Route path='/users' element={<Users/>} />
-          <Route path='/' element={<Home/>} />
+          <Route path='/' element={<TaskPage />} />
+          <Route path='/help' element={<HelpPage />} />
+          <Route path='/login' element={<LoginPage />} />
         </Routes>
       </div>
     </BrowserRouter>
@@ -36,15 +39,3 @@ const Router = () => {
 }
 
 export default Router;
-
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
