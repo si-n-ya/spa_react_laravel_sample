@@ -13,20 +13,14 @@ const Router = () => {
   return (
     <BrowserRouter>
       <div>
-        <nav>
+        <header className="global-head">
           <ul>
-            <li>
-              <Link to="/">ホーム</Link>
-            </li>
-            <li>
-              <Link to="/help">ヘルプ</Link>
-            </li>
-            <li>
-              <Link to="/login">ログイン</Link>
-            </li>
+            <li><Link to="/">ホーム</Link></li>
+            <li><Link to="/help">ヘルプ</Link></li>
+            <li><Link to="/login">ログイン</Link></li>
+            <li><span>ログアウト</span></li>
           </ul>
-        </nav>
-
+        </header>
         <Routes>
           // v6からelementを用いた書き方に変更
           <Route path='/' element={<TaskPage />} />
