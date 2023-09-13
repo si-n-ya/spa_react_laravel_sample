@@ -51,6 +51,40 @@ class TaskTest extends TestCase
     }
 
     /**
+     * タスクの見入力テスト
+     * @test
+     */
+    public function testValidateTaskTitleIsNotEmpty(): void
+    {
+        $data = [
+            'title' => '',
+        ];
+        $response = $this->postJson('/api/tasks', $data);
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => 'タイトルは必ず指定してください。'
+                ]); // バリデーションの文字列確認
+    }
+
+    /**
+     * タスクの最大文字数テスト
+     * @test
+     */
+    public function testValidateTaskTitleIsMaxNumberOfCharacters(): void
+    {
+        $data = [
+            'title' => str_repeat('あ', 256),
+        ];
+        $response = $this->postJson('/api/tasks', $data);
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => 'タイトルは、255文字以下で指定してください。'
+                ]); // バリデーションの文字列確認
+    }
+
+    /**
      * タスクを更新
      * @test
      */
