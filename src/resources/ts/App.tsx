@@ -2,6 +2,8 @@ import React from 'react';
 import Router from './router';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import { Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -18,6 +20,7 @@ const App = () => {
     <>
       <QueryClientProvider client={queryClient}>
         <Router />
+        <ToastContainer hideProgressBar={true} />
       </QueryClientProvider>
     </>
   )
