@@ -6,6 +6,15 @@ const getTasks = async() => {
   return data;
 }
 
+const updateDoneTask = async ({ id, is_done }: Task) => {
+  const { data } = await axios.patch<Task[]>(
+    `/api/tasks/update-done/${id}`,// URL
+    { is_done: !is_done }// 送信するデータ
+  );
+  return data;
+}
+
 export {
-  getTasks
+  getTasks,
+  updateDoneTask
 }
