@@ -4,6 +4,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import { Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from './hooks/AuthContext'
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -18,10 +19,12 @@ const App = () => {
   })
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <Router />
-        <ToastContainer hideProgressBar={true} />
-      </QueryClientProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router />
+          <ToastContainer hideProgressBar={true} />
+        </QueryClientProvider>
+      </AuthProvider>
     </>
   )
 }

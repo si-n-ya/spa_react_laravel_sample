@@ -22,10 +22,8 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        // Log::debug(Auth::attempt($credentials));
-        // Log::debug('ログ', $request->session()->all());
         if (Auth::attempt($credentials)) {
-            // $request->session()->regenerate();
+            $request->session()->regenerate();
 
             return response()->json(Auth::user());
         }
