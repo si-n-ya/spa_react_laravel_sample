@@ -1,6 +1,7 @@
 import * as api from "../api/TaskAPI"
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 const useTasks = () => {
   return useQuery('tasks', () => api.getTasks());  
@@ -37,8 +38,20 @@ const useCreateTask = () => {
       queryClient.invalidateQueries('tasks')// コンポーネントを再描画
       toast.success('登録に成功しました。')
     },
-    onError: () => {
-      errorToastId = toast.error('登録に失敗しました。')
+    onError: (error: AxiosError) => {
+      if (error.response?.data.errors) {
+        // 複数のエラーメッセージに対応
+        Object.values(error.response?.data.errors).map(
+          (messages: any) => {
+            messages.map((message: string) => {
+              toast.error(message)
+            })
+          }
+        )
+      } else {
+        // バリデーションエラーがない場合
+        errorToastId = toast.error('登録に失敗しました。')
+      }
     }
   })
 }
