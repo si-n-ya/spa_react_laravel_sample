@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter,
   Routes, // v6からSwitchからRoutesに
@@ -9,7 +9,19 @@ import TaskPage from './pages/tasks';
 import LoginPage from './pages/login';
 import HelpPage from './pages/help';
 
+import axios from 'axios';
+
 const Router = () => {
+
+  useEffect(() => {
+    axios.post('/api/login', {
+      email: 'yamada@example.com',
+      password: '12345678',
+    }).then(response => {
+      console.log(response)
+    });
+  }, [])
+
   return (
     <BrowserRouter>
       <div>

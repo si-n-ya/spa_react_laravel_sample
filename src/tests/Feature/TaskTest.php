@@ -5,6 +5,7 @@ namespace Tests\Feature;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,6 +13,18 @@ class TaskTest extends TestCase
 {
     // テスト実行時にDBをリセット
     use RefreshDatabase;
+
+    // テスト時に最初に実行されるメソッド
+    public function setup(): void
+    {
+        parent::setUp();
+        
+        // ユーザーデータを一つ作る
+        $user = User::factory()->create();
+        // ログインした状態にする（ユーザー認証をパスするため）
+        $this->actingAs($user);
+    }
+
     /**
      * タスク一覧を取得
      */

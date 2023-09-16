@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
@@ -15,9 +16,13 @@ use App\Http\Controllers\TaskController;
 |
 */
 
-Route::apiResource('tasks', 'App\Http\Controllers\TaskController');
-Route::patch('tasks/update-done/{task}', [TaskController::class, 'updateDone']);
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::apiResource('tasks', 'App\Http\Controllers\TaskController');
+    Route::patch('tasks/update-done/{task}', [TaskController::class, 'updateDone']);
+    Route::get('user', function (Request $request) {
+        return $request->user();
+    });
 });
