@@ -9,9 +9,12 @@ import {
 } from "react-router-dom";
 import TaskPage from './pages/tasks';
 import LoginPage from './pages/login';
+import NotFoundPage from './pages/error';
 import HelpPage from './pages/help';
 import { useLogout, useUser } from './queries/AuthQuery';
 import { useAuth } from './hooks/AuthContext';
+
+import axios from 'axios';
 
 const Router = () => {
   const logout = useLogout()
@@ -82,6 +85,7 @@ const Router = () => {
           <Route path="/" element={<GuardedTaskPage />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/login" element={<GuardedLoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </BrowserRouter>
