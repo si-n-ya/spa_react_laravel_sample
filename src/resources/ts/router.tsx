@@ -5,8 +5,7 @@ import {
   Route,
   Link,
   RouteProps,
-  Redirect,
-  // useNavigate,
+  useNavigate,
 } from "react-router-dom";
 import TaskPage from './pages/tasks';
 import LoginPage from './pages/login';
@@ -14,13 +13,10 @@ import HelpPage from './pages/help';
 import { useLogout, useUser } from './queries/AuthQuery';
 import { useAuth } from './hooks/AuthContext';
 
-import axios from 'axios';
-
 const Router = () => {
   const logout = useLogout()
   const { isAuth, setIsAuth } = useAuth()
   const { isLoading, data: authUser } = useUser()
-  const navigate = useNavigate();
 
   // 初期表示に実行
   useEffect(() => {
@@ -29,26 +25,30 @@ const Router = () => {
     }
   }, [authUser])// authUser変数に変更があった時にUseEffectが実行
 
-  // ログインしていない時はログインページへリダイレクトするためのルートを設定
-  const GuardRoute = (props: RouteProps) => {
-    // toに遷移先のページを指定
-    // if (!isAuth) {
-    //   navigate('/login')
-    //   return null
-    // }
-     return <Redirect to="/login" />
-    return <Route {...props} />
+  // ログアウト状態の時は、ログインページへリダイレクトするためのルートを設定
+  const GuardedTaskPage = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (!isAuth) {
+        navigate('/login');
+      }
+    }, [isAuth, navigate]);
+
+    return isAuth ? <TaskPage /> : null;
   }
 
-  // ログイン状態でログインページへアクセス時に、トップページへリダイレクトするためのルートを設定
-  const LoginRoute = (props: RouteProps) => {
-    // toに遷移先のページを指定
-    if (isAuth) return <Redirect to="/" />
-    // if (isAuth) {
-    //   navigate('/');
-    //   return null;
-    // }
-    return <Route {...props} />
+  // ログイン状態の時は、トップページへリダイレクトするためのルートを設定
+  const GuardedLoginPage = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (isAuth) {
+        navigate('/');
+      }
+    }, [isAuth, navigate]);
+
+    return !isAuth ? <LoginPage /> : null;
   }
 
   const navigation = (
@@ -70,6 +70,8 @@ const Router = () => {
     </header>
   )
 
+  if (isLoading) return <div className='loader'></div>
+
   return (
     <BrowserRouter>
       { isAuth ? navigation: loginNavigation }
@@ -77,9 +79,9 @@ const Router = () => {
         <Routes>
           // v6からelementを用いた書き方に変更
           // exactで完全一致でアクセスできるようにする
-          <GuardRoute exact path='/' element={<TaskPage />} />
-          <Route path='/help' element={<HelpPage />} />
-          <LoginRoute path='/login' element={<LoginPage />} />
+          <Route path="/" element={<GuardedTaskPage />} />
+          <Route path="/help" element={<HelpPage />} />
+          <Route path="/login" element={<GuardedLoginPage />} />
         </Routes>
       </div>
     </BrowserRouter>
