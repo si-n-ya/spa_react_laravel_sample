@@ -29,6 +29,8 @@ const useLogout = () => {
     onSuccess: (user) => {
       if (user) {
         setIsAuth(false)
+        // ログアウト後に別のユーザーでログインすると、前回のユーザーのTODOが一瞬表示されてしまうため
+        window.location.href = '/login'
       }
     },
     onError: () => {

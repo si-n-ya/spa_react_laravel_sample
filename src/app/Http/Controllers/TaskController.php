@@ -6,16 +6,24 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use Illuminate\Http\Request;
 use App\Models\Task;
-use Log;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    public function __construct()
+    {
+        // policy（only()で適用メソッドを指定）
+        $this->middleware('can:checkUser,task')->only([
+            'updateDone', 'update', 'destroy'
+        ]);
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Task::orderByDesc('id')->get();
+        return Task::where('user_id', Auth::id())->orderByDesc('id')->get();
     }
 
     /**
@@ -23,6 +31,9 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $request->merge([
+            'user_id' => Auth::id()
+        ]);
         // createは正常の場合はデータを返す
         $task = Task::create($request->all());
         
